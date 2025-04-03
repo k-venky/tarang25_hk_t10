@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header"></div>
+
+    <div class="wrapper">
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Find Your Internship</h2>
+
+            <!-- Internship Count -->
+            <p class="text-center fs-5"><b>Total Internships:</b> <span id="internship-count">0</span></p>
+
+            <!-- Filters Section -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <select id="location-filter" class="form-select">
+                        <option value="">Select Location</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select id="company-filter" class="form-select">
+                        <option value="">Select Company</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary w-100" onclick="filterInternships()">Apply Filters</button>
+                </div>
+            </div>
+
+            <!-- Internship List -->
+            <div id="internship-list" class="row g-4"></div>
+        </div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

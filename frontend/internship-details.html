@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div id="header"></div>
+
+    <div class="container mt-5">
+        <div id="internship-details" class="row justify-content-center"></div>
+    </div>
+
+    <div id="footer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", fetchInternshipDetails);
+
+        async function fetchInternshipDetails() {
+            // 🔹 Get Internship ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const internshipId = urlParams.get("id");
+
+            if (!internshipId) {
+                document.getElementById("internship-details").innerHTML = `
+                    <div class="alert alert-danger text-center">Invalid Internship ID</div>
+                `;
+                return;
+            }
+
+            try {
+                // 🔹 API Call to Fetch Internship Details
+                const response = await fetch(`http://localhost:2000/internship/${internshipId}`);
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    displayInternshipDetails(result.data);
+                } else {
+                    document.getElementById("internship-details").innerHTML = `
+                        <div class="alert alert-danger text-center">${result.message}</div>
+                    `;
+                }
+            } catch (error) {
+                console.error("Error fetching internship details:", error);
+                document.getElementById("internship-details").innerHTML = `
+                    <div class="alert alert-danger text-center">Failed to fetch details. Try again later.</div>
+                `;
+            }
+        }
+
+        function displayInternshipDetails(internship) {
+            const detailsContainer = document.getElementById("internship-details");
+
+            // 🔹 Format Date
+            const postedDate = new Date(internship.created_at).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            });
+
+            // 🔹 Internship Image (Default Fallback)
+            const image = internship.image_link
+                ? `<img src="${internship.image_link}" class="img-fluid rounded internship-img" alt="Internship Image">`
+                : `<img src="assets/images/default-image.jpg" class="img-fluid rounded internship-img" alt="Default Image">`;
+
+            detailsContainer.innerHTML = `
+                <div class="col-md-8">
+                    <div class="card shadow-sm p-4">
+                        ${image}
+                        <div class="card-body">
+                            <h2 class="card-title">${internship.title}</h2>
+                            <p class="card-text">${internship.description}</p>
+                            <p><b>Company:</b> ${internship.company}</p>
+                            <p><b>Location:</b> ${internship.location}</p>
+                            <p class="text-muted"><b>Posted on:</b> ${postedDate}</p>
+                            <p class="text-warning">★★★★☆ (4.2/5) <span class="text-muted">(120 reviews)</span></p>
+                            <a href="#" class="btn btn-success w-100">Apply Now</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>
+
